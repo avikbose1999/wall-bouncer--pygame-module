@@ -1,17 +1,21 @@
 import pygame, sys
 
-
+# Colors and Dimensions
 SCREEN_DIMENSIONS = screenX, screenY = (700,500 )
 BG_COLOR = (0,0,0)
 PADDLE_COLOR = (255, 147, 79)
 BALL_COLOR = (34, 170, 161)
 RADIUS = 15
 BRICK_COLOR_1 = (178,34,34)
+
+# Initialization - Pygame
 pygame.init()
 pygame.display.set_caption("Brick Breaker")
 screen = pygame.display.set_mode(SCREEN_DIMENSIONS)
 clock = pygame.time.Clock()
 pygame.mouse.set_visible(0)
+
+# Class for bottom Paddle
 class Paddle:
 	"""docstring for Paddle"""
 	def __init__(self, X, Y, velX, width, height):
@@ -21,6 +25,7 @@ class Paddle:
 		self.width = width
 		self.height = height
 		self.paddleRect = pygame.draw.rect(screen, PADDLE_COLOR, (int(self.x), int(self.y), int(self.width), int(self.height)))
+		
 	def draw(self):
 		self.paddleRect = pygame.draw.rect(screen, PADDLE_COLOR, (int(self.x), int(self.y), int(self.width), int(self.height)))
 
@@ -36,12 +41,16 @@ class Paddle:
 			self.x = 0
 		if self.x + self.width > screenX:
 			self.x = screenX - self.width
+
+# Player Paddle
 playerPaddle = Paddle(	X = screenX//2 - screenX*0.2//2, 
 						Y = 0.95 * screenY, 
 						velX = 15,
 						width = screenX*0.2,
 						height = screenY*0.02
 					)
+
+# Class for Ball object
 class Ball:
 	"""docstring for Ball"""
 	def __init__(self, x, y, velX, velY, radius):
@@ -53,8 +62,10 @@ class Ball:
 		self.currVelX = self.velX
 		self.currVelY = self.velY
 		self.bodyRect = pygame.draw.circle(screen, BALL_COLOR, (int(self.x), int(self.y)), int(self.radius))
+		
 	def draw(self):
 		self.bodyRect = pygame.draw.circle(screen, BALL_COLOR, (int(self.x), int(self.y)), int(self.radius))
+		
 	def update_position(self):
 		if self.x + self.radius > screenX:
 			self.currVelX = -self.velX
@@ -66,12 +77,17 @@ class Ball:
 			self.currVelY = self.velY
 		self.x += self.currVelX
 		self.y += self.currVelY
+		
 	def set_velocity(self, velX, velY):
 		self.velX = velX
 		self.velY = velY
 		self.currVelX = self.velX
 		self.currVelY = self.velY
+
+# Ball Object
 gameBall = Ball(playerPaddle.x + playerPaddle.width//2, playerPaddle.y - RADIUS, 0, 0, RADIUS)
+
+# Class for brick objects
 class Brick(pygame.sprite.Sprite):
 	def __init__(self, X, Y,width, height):
 		pygame.sprite.Sprite.__init__(self)
@@ -82,11 +98,14 @@ class Brick(pygame.sprite.Sprite):
 		self.brickRect = pygame.draw.rect(screen, BRICK_COLOR_1, (int(self.x), int(self.y), int(self.width), int(self.height)))
 	def draw(self):
 		self.paddleRect = pygame.draw.rect(screen, BRICK_COLOR_1, (int(self.x), int(self.y), int(self.width), int(self.height)))
+
+# Brick Object
 brick = Brick(	X = screenX//2 - 50//2,
 				Y = 0.2 * screenY,
 				width = 50,
 				height = 20
 			)
+
 def playGame():
 	while True:
 		for event in pygame.event.get():
@@ -110,6 +129,7 @@ def playGame():
 		pygame.display.update()
 		clock.tick(70)
 def main():
+	# Game Loop
 	while True:
 		for event in pygame.event.get():
 
@@ -130,5 +150,6 @@ def main():
 		brick.draw()
 		pygame.display.update()
 		clock.tick(70)
+		
 if __name__ == '__main__':
 	main()
